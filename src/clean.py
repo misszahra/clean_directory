@@ -3,16 +3,14 @@ from pathlib import Path
 from src.data import DATA_DIR
 from src.utils.io import read_json
 from loguru import logger
+from typing import Union
 
 
 class OrgenizeFiles:
     """This class is used to orgenize file in the directory by
        moving files in to directories based on mime type.
     """
-    def __init__(self, directory):
-        self.directory = Path(directory)
-        if not self.directory.exists():
-            raise FileNotFoundError(f"{self.directory} is not exists")
+    def __init__(self):
         ext_dir = read_json(DATA_DIR / "extensions.json")
         self.extensions_dest = {}
         for dir_name, ext_list in ext_dir.items():
@@ -20,13 +18,16 @@ class OrgenizeFiles:
                 self.extensions_dest[ext] = dir_name
         # print(self.extensions_dest)
 
-    def __call__(self):
+    def __call__(self, directory:Union[str, Path]):
         """Orgenize file in a deirectory by moving  them to
         sub directories based on extensoins
         """
-        logger.info(f"Orgenaizing file in {self.directory}...")
+        directory = Path(directory)
+        if not directory.exists():
+            raise FileNotFoundError(f"{directory} is not exists")
+        logger.info(f"Orgenaizing file in {directory}...")
         file_extensions = []
-        for file_path in self.directory.iterdir():
+        for file_path in directory.iterdir():
 
             # ignor directories
             if file_path.is_dir():
@@ -50,6 +51,6 @@ class OrgenizeFiles:
 
 
 if __name__ == "__main__":
-    org_files = OrgenizeFiles("/home/ali/Dwonlods")
-    org_files()
+    org_files = OrgenizeFiles()
+    org_files("/home/ali/Dwonlods")
     print('Done!')
