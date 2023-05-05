@@ -4,6 +4,7 @@ from src.data import DATA_DIR
 from src.utils.io import read_json
 from loguru import logger
 from typing import Union
+import sys
 
 
 class OrgenizeFiles:
@@ -52,5 +53,5 @@ class OrgenizeFiles:
 
 if __name__ == "__main__":
     org_files = OrgenizeFiles()
-    org_files("/home/ali/Dwonlods")
+    org_files(sys.argv[1])
     print('Done!')
